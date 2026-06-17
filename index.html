@@ -369,8 +369,8 @@
         function handleKeyPress(e) {
             // با زدن اینتر پیام بره (مگر اینکه شیفت+اینتر زده بشه برای خط جدید)
             if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault(); // (باگت اینجا بود که برعکس و اشتباه نوشته بودی، درستش کردم)
-                sendMessage();      
+                e.sendMessage();  
+                preventDefault();
             }
         }
 
