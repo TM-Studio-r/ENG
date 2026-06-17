@@ -8,13 +8,13 @@
         /* ================= متغیرهای تم تلگرامی ================= */
         :root {
             --bg-color: #e5e5e5;
-            --bg-image: url('https://web.telegram.org/a/chat-bg-pattern-light.png');
-            --glass-bg: rgba(255, 255, 255, 0.65);
+            --bg-image: url('l2.jpeg');
+            --glass-bg: rgba(255, 255, 255, 0.5);
             --glass-border: rgba(255, 255, 255, 0.4);
             --text-main: #000000;
             --text-muted: #707579;
             --accent-color: #3390ec;
-            --msg-self-bg: #eeffde;
+            --msg-self-bg: #E3F2FD;
             --msg-other-bg: #ffffff;
             --neon-glow: 0 0 10px rgba(51, 144, 236, 0.5);
             --shadow-glass: 0 4px 30px rgba(0, 0, 0, 0.1);
@@ -23,13 +23,13 @@
 
         [data-theme="dark"] {
             --bg-color: #181818;
-            --bg-image: url('https://web.telegram.org/a/chat-bg-pattern-dark.png');
-            --glass-bg: rgba(33, 33, 33, 0.75);
+            --bg-image: url('d.jpeg');
+            --glass-bg: rgba(33, 33, 33, 0.5);
             --glass-border: rgba(255, 255, 255, 0.05);
             --text-main: #ffffff;
             --text-muted: #aaaaaa;
             --accent-color: #8774e1;
-            --msg-self-bg: #2b5278; 
+            --msg-self-bg: linear-gradient(45deg, #0D47A1, #42A5F5); 
             --msg-other-bg: #212121;
             --neon-glow: 0 0 15px rgba(135, 116, 225, 0.6);
             --shadow-glass: 0 4px 30px rgba(0, 0, 0, 0.5);
@@ -60,8 +60,8 @@
 
         .glass {
             background: var(--glass-bg);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
+            backdrop-filter: blur(13px);
+            -webkit-backdrop-filter: blur(13px);
             border: 1px solid var(--glass-border);
             box-shadow: var(--shadow-glass);
         }
@@ -105,14 +105,15 @@
 
         /* هدر فیکس تلگرامی */
         header {
-            position: fixed; top: 0; left: 0; right: 0; height: 60px;
+            position: fixed; top: 8px; left: 12px; right: 12px; height: 60px;
+
             display: flex; align-items: center; justify-content: space-between;
-            padding: 0 15px; z-index: 100; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;
+            padding: 0 15px; z-index: 100; border-radius: 20px;
         }
         .header-left { display: flex; align-items: center; gap: 12px; }
         .group-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
         .group-info h1 { font-size: 17px; font-weight: 600; margin-bottom: 2px; }
-        .group-info span { font-size: 13px; color: var(--text-muted); }
+        .group-info span { font-size: 13px; color: var(--text-muted); direction: ltr;}
         .theme-btn {
             width: 36px; height: 36px; border-radius: 50%; border: none;
             background: transparent; cursor: pointer; display: flex;
@@ -148,17 +149,26 @@
         }
         .self .bubble {
             background: var(--msg-self-bg); color: #000;
-            border-radius: 16px 16px 4px 16px;
+            border-radius: 19px 19px 4px 19px;
         }
         [data-theme="dark"] .self .bubble { color: #fff; }
         .other .bubble {
             background: var(--msg-other-bg);
-            border-radius: 16px 16px 16px 4px;
+            border-radius: 19px 19px 19px 4px;
         }
         
         .sender-name { font-size: 13px; font-weight: 600; color: var(--accent-color); margin-bottom: 4px; display: none; }
         .other .sender-name { display: block; }
         .msg-text { font-size: 15px; line-height: 1.4; word-wrap: break-word; white-space: pre-wrap; }
+
+        /* ---> استایل جدید برای ساعت پیام <--- */
+        .msg-time {
+            font-size: 11px;
+            text-align: right; /* ساعت رو میندازه گوشه پایین حباب */
+            margin-top: 3px;
+            opacity: 0.6;
+            line-height: 1;
+        }
 
         /* فوتر فیکس */
         footer {
@@ -173,11 +183,11 @@
         }
         #msg-input::placeholder { color: var(--text-muted); }
         .send-btn {
-            width: 50px; height: 50px; border-radius: 50%; background: var(--accent-color);
+            width: 30px; height: 30px; border-radius: 50%; background: #3390ec;
             border: none; color: #fff; display: flex; justify-content: center; align-items: center;
-            cursor: pointer; flex-shrink: 0; box-shadow: var(--neon-glow);
+            cursor: pointer; flex-shrink: 0;
         }
-        .send-btn svg { width: 24px; height: 24px; fill: currentColor; margin-right: 4px; }
+        .send-btn svg { width: 19px; height: 19px; fill: currentColor; margin-right: 4px; }
     </style>
 </head>
 <body>
@@ -198,14 +208,14 @@
 
     <div id="chat-screen">
         <header class="glass">
+            <button class="theme-btn" onclick="toggleTheme()" id="theme-icon">🌙</button>
             <div class="header-left">
-                <img src="f.png" alt="Group" class="group-avatar" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%233390ec%22/%3E%3Ctext x=%2250%22 y=%2255%22 font-size=%2240%22 fill=%22white%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-family=%22Arial%22%3EEG%3C/text%3E%3C/svg%3E'">
                 <div class="group-info">
                     <h1>English gap</h1>
-                    <span>6 members</span>
+                    <span></span>
                 </div>
+                <img src="f.png" alt="Group" class="group-avatar" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%233390ec%22/%3E%3Ctext x=%2250%22 y=%2255%22 font-size=%2240%22 fill=%22white%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-family=%22Arial%22%3EEG%3C/text%3E%3C/svg%3E'">
             </div>
-            <button class="theme-btn" onclick="toggleTheme()" id="theme-icon">🌙</button>
         </header>
 
         <div id="messages-container"></div>
@@ -213,14 +223,15 @@
         <footer>
             <div class="input-wrapper glass">
                 <textarea id="msg-input" rows="1" placeholder="Message" oninput="autoResize(this)" onkeypress="handleKeyPress(event)"></textarea>
+                <button class="send-btn" onclick="sendMessage()">
+                    <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+                </button>
             </div>
-            <button class="send-btn" onclick="sendMessage()">
-                <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
-            </button>
         </footer>
     </div>
 
     <script>
+        // ================= تنظیمات اتصال به سوپابیس =================
         const SUPABASE_URL = "https://nyacmumgxdocsvgkribt.supabase.co/rest/v1/messages";
         const SUPABASE_KEY = "sb_publishable_KkurUdEDr8cU0F219jCRcg_A6QFWCWw";
         
@@ -228,6 +239,7 @@
         let lastMessageCount = 0;
         let fetchInterval;
 
+        // ================= مدیریت تم (لایت/دارک) =================
         function initTheme() {
             const savedTheme = localStorage.getItem('tg_theme') || 'light';
             document.body.setAttribute('data-theme', savedTheme);
@@ -243,9 +255,10 @@
         }
 
         function updateThemeIcon(theme) {
-            document.getElementById('theme-icon').innerText = theme === 'dark' ? '☀️' : '🌙';
+            document.getElementById('theme-icon').innerText = theme === 'dark' ? '🔆' : '🌙';
         }
 
+        // ================= مدیریت لاگین =================
         function checkLogin() {
             const savedUser = localStorage.getItem('tg_username');
             if (savedUser) {
@@ -265,19 +278,25 @@
             }
         }
 
-        function handleLoginPress(e) { if (e.key === 'Enter') login(); }
+        function handleLoginPress(e) {
+            if (e.key === 'Enter') login();
+        }
 
         function showChat() {
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('chat-screen').style.display = 'flex';
-            fetchMessages();
-            fetchInterval = setInterval(fetchMessages, 1500); 
+            fetchMessages(); // دریافت بلافاصله
+            fetchInterval = setInterval(fetchMessages, 1500); // حلقه While تو (هر 1.5 ثانیه)
         }
 
+        // ================= دریافت پیام‌ها (ریسیو) =================
         function fetchMessages() {
             fetch(`${SUPABASE_URL}?select=*&order=created_at.asc`, {
                 method: "GET",
-                headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
+                headers: {
+                    "apikey": SUPABASE_KEY,
+                    "Authorization": `Bearer ${SUPABASE_KEY}`
+                }
             })
             .then(res => res.json())
             .then(data => {
@@ -296,34 +315,41 @@
             
             messages.forEach(msg => {
                 const isSelf = msg.sender === currentUser;
+                
                 const rowDiv = document.createElement('div');
                 rowDiv.className = `msg-row ${isSelf ? 'self' : 'other'}`;
                 
+                // ---> نمایش زمان زیر پیام، اگر timee وجود نداشت خالی می‌ذاره <---
+                const timeHtml = msg.timee ? `<div class="msg-time">${msg.timee}</div>` : '';
+
                 rowDiv.innerHTML = `
                     <div class="bubble">
                         <div class="sender-name">${msg.sender}</div>
                         <div class="msg-text">${escapeHTML(msg.text)}</div>
+                        ${timeHtml}
                     </div>
                 `;
                 container.appendChild(rowDiv);
             });
         }
 
-        // بهبود تابع اسکرول با تاخیر کوچک برای رندر کامل DOM
         function scrollToBottom() {
             const container = document.getElementById('messages-container');
-            setTimeout(() => {
-                container.scrollTop = container.scrollHeight;
-            }, 50);
+            container.scrollTop = container.scrollHeight;
         }
 
+        // ================= ارسال پیام (سند) =================
         function sendMessage() {
             const inputEl = document.getElementById('msg-input');
             const text = inputEl.value.trim();
             if (!text) return;
 
             inputEl.value = '';
-            autoResize(inputEl);
+            autoResize(inputEl); // برگردوندن سایز اینپوت به حالت اول
+
+            // ---> ساختن فرمت ساعت دقیق (24 ساعته) برای ارسال <---
+            const now = new Date();
+            const timeeStr = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
 
             fetch(SUPABASE_URL, {
                 method: "POST",
@@ -333,30 +359,44 @@
                     "Content-Type": "application/json",
                     "Prefer": "return=minimal"
                 },
-                body: JSON.stringify({ sender: currentUser, text: text })
+                // ---> زمان رو اضافه کردم به دیتای ارسالی <---
+                body: JSON.stringify({ sender: currentUser, text: text, timee: timeeStr })
             })
-            .then(res => { if(res.ok) fetchMessages(); })
+            .then(res => {
+                if(res.ok) fetchMessages();
+            })
             .catch(err => console.error("Error Sending:", err));
         }
 
         function handleKeyPress(e) {
+            // با زدن اینتر پیام بره (مگر اینکه شیفت+اینتر زده بشه برای خط جدید)
             if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                sendMessage();
+                e.preventDefault(); // (باگت اینجا بود که برعکس و اشتباه نوشته بودی، درستش کردم)
+                sendMessage();      
             }
         }
 
+        // ================= توابع کمکی =================
+        // تغییر سایز خودکار باکس پیام (مثل تلگرام)
         function autoResize(textarea) {
             textarea.style.height = 'auto';
-            textarea.style.height = (textarea.scrollHeight < 120 ? textarea.scrollHeight : 120) + 'px';
+            textarea.style.height = (textarea.scrollHeight < 100 ? textarea.scrollHeight : 100) + 'px';
         }
 
+        // جلوگیری از کدهای مخرب HTML در متن پیام
         function escapeHTML(str) {
-            return str.replace(/[&<>'"]/g, tag => ({
-                '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
-            }[tag] || tag));
+            return str.replace(/[&<>'"]/g, 
+                tag => ({
+                    '&': '&amp;',
+                    '<': '&lt;',
+                    '>': '&gt;',
+                    "'": '&#39;',
+                    '"': '&quot;'
+                }[tag] || tag)
+            );
         }
 
+        // راه‌اندازی در شروع
         initTheme();
         checkLogin();
     </script>
