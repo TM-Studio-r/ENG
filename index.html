@@ -7,7 +7,6 @@
     <style>
         /* ================= متغیرهای تم تلگرامی ================= */
         :root {
-            /* تم لایت (پیش‌فرض) */
             --bg-color: #e5e5e5;
             --bg-image: url('https://web.telegram.org/a/chat-bg-pattern-light.png');
             --glass-bg: rgba(255, 255, 255, 0.65);
@@ -15,25 +14,26 @@
             --text-main: #000000;
             --text-muted: #707579;
             --accent-color: #3390ec;
-            --msg-self-bg: #eeffde; /* سبز روشن تلگرام */
+            --msg-self-bg: #eeffde;
             --msg-other-bg: #ffffff;
             --neon-glow: 0 0 10px rgba(51, 144, 236, 0.5);
             --shadow-glass: 0 4px 30px rgba(0, 0, 0, 0.1);
+            --scrollbar-thumb: rgba(0, 0, 0, 0.15);
         }
 
         [data-theme="dark"] {
-            /* تم دارک تلگرام */
-            --bg-color: #0f0f0f;
+            --bg-color: #181818;
             --bg-image: url('https://web.telegram.org/a/chat-bg-pattern-dark.png');
             --glass-bg: rgba(33, 33, 33, 0.75);
             --glass-border: rgba(255, 255, 255, 0.05);
             --text-main: #ffffff;
             --text-muted: #aaaaaa;
-            --accent-color: #8774e1; /* بنفش/آبی دارک مود */
-            --msg-self-bg: #8774e1; 
+            --accent-color: #8774e1;
+            --msg-self-bg: #2b5278; 
             --msg-other-bg: #212121;
             --neon-glow: 0 0 15px rgba(135, 116, 225, 0.6);
             --shadow-glass: 0 4px 30px rgba(0, 0, 0, 0.5);
+            --scrollbar-thumb: rgba(255, 255, 255, 0.15);
         }
 
         /* ================= استایل‌های پایه ================= */
@@ -58,7 +58,6 @@
             transition: background-color 0.4s ease;
         }
 
-        /* افکت شیشه‌ای مایع (Liquid Glass) */
         .glass {
             background: var(--glass-bg);
             backdrop-filter: blur(16px);
@@ -67,24 +66,20 @@
             box-shadow: var(--shadow-glass);
         }
 
-        /* ================= صفحه لاگین (شبیه گرفتن شماره تلگرام) ================= */
+        /* ================= صفحه لاگین ================= */
         #login-screen {
             position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             display: flex; justify-content: center; align-items: center;
             background: var(--bg-color); z-index: 1000;
         }
-        .login-box {
-            width: 320px; text-align: center; display: flex; flex-direction: column; align-items: center;
-        }
+        .login-box { width: 320px; text-align: center; display: flex; flex-direction: column; align-items: center; }
         .login-logo {
             width: 100px; height: 100px; border-radius: 50%; background: var(--accent-color);
             margin-bottom: 20px; display: flex; justify-content: center; align-items: center;
             box-shadow: var(--neon-glow);
         }
-        .login-logo img { width: 50px; }
         .login-box h2 { font-weight: 500; font-size: 24px; margin-bottom: 10px; }
         .login-box p { color: var(--text-muted); font-size: 15px; margin-bottom: 30px; }
-        
         .input-group { position: relative; width: 100%; margin-bottom: 30px; }
         .login-input {
             width: 100%; background: transparent; border: none; border-bottom: 2px solid var(--text-muted);
@@ -92,7 +87,6 @@
             text-align: center;
         }
         .login-input:focus { border-bottom-color: var(--accent-color); }
-        
         .floating-btn {
             width: 60px; height: 60px; border-radius: 50%; background: var(--accent-color);
             border: none; color: #fff; font-size: 24px; cursor: pointer;
@@ -102,42 +96,51 @@
         .floating-btn:active { transform: scale(0.95); }
 
         /* ================= محیط اصلی چت ================= */
-        #chat-screen { display: none; flex-direction: column; height: 100%; }
+        #chat-screen { 
+            display: none; 
+            flex-direction: column; 
+            height: 100vh; /* فیکس شدن قد کل صفحه چت */
+            position: relative; 
+        }
 
-        /* هدر تلگرامی فیکس */
+        /* هدر فیکس تلگرامی */
         header {
             position: fixed; top: 0; left: 0; right: 0; height: 60px;
             display: flex; align-items: center; justify-content: space-between;
             padding: 0 15px; z-index: 100; border-bottom-left-radius: 20px; border-bottom-right-radius: 20px;
         }
         .header-left { display: flex; align-items: center; gap: 12px; }
-        .group-avatar {
-            width: 42px; height: 42px; border-radius: 50%; object-fit: cover;
-            border: 2px solid rgba(255,255,255,0.2);
-        }
+        .group-avatar { width: 42px; height: 42px; border-radius: 50%; object-fit: cover; }
         .group-info h1 { font-size: 17px; font-weight: 600; margin-bottom: 2px; }
         .group-info span { font-size: 13px; color: var(--text-muted); }
-        
-        /* دکمه تم دارک/لایت */
         .theme-btn {
             width: 36px; height: 36px; border-radius: 50%; border: none;
             background: transparent; cursor: pointer; display: flex;
             justify-content: center; align-items: center; font-size: 20px;
-            color: var(--accent-color); transition: 0.3s;
+            color: var(--accent-color);
         }
-        .theme-btn:hover { background: rgba(128,128,128,0.1); }
 
-        /* باکس اسکرول پیام‌ها */
+        /* باکس اسکرول پیام‌ها (اینجا درست شد) */
         #messages-container {
-            flex: 1; padding: 75px 15px 80px 15px; /* فاصله‌ها برای هدر و فوتر فیکس */
-            overflow-y: auto; display: flex; flex-direction: column; gap: 8px;
+            flex: 1; 
+            padding: 75px 15px 90px 15px; /* تنظیم پدینگ بالا و پایین */
+            overflow-y: auto; /* فعال کردن اسکرول عمودی */
+            min-height: 0; /* حیاتی‌ترین خط برای کارکرد اسکرول در فلکس‌باکس */
+            display: flex; 
+            flex-direction: column; 
+            gap: 8px;
+            -webkit-overflow-scrolling: touch;
         }
-        #messages-container::-webkit-scrollbar { display: none; /* مخفی کردن اسکرول‌بار برای زیبایی مثل موبایل */ }
+
+        /* اسکرول بار ظریف تلگرامی */
+        #messages-container::-webkit-scrollbar { width: 5px; }
+        #messages-container::-webkit-scrollbar-track { background: transparent; }
+        #messages-container::-webkit-scrollbar-thumb { background: var(--scrollbar-thumb); border-radius: 10px; }
 
         /* استایل حباب پیام‌ها */
         .msg-row { display: flex; width: 100%; }
-        .msg-row.self { justify-content: flex-start; /* راست چین در RTL */ }
-        .msg-row.other { justify-content: flex-end; /* چپ چین در RTL */ }
+        .msg-row.self { justify-content: flex-start; }
+        .msg-row.other { justify-content: flex-end; }
 
         .bubble {
             max-width: 75%; padding: 8px 12px; position: relative;
@@ -145,51 +148,40 @@
         }
         .self .bubble {
             background: var(--msg-self-bg); color: #000;
-            border-radius: 16px 16px 4px 16px; /* گوشه تیز سمت راست پایین */
+            border-radius: 16px 16px 4px 16px;
         }
         [data-theme="dark"] .self .bubble { color: #fff; }
-        
         .other .bubble {
             background: var(--msg-other-bg);
-            border-radius: 16px 16px 16px 4px; /* گوشه تیز سمت چپ پایین */
+            border-radius: 16px 16px 16px 4px;
         }
         
-        .sender-name {
-            font-size: 13px; font-weight: 600; color: var(--accent-color);
-            margin-bottom: 4px; display: none; /* پیش‌فرض مخفی */
-        }
-        .other .sender-name { display: block; /* فقط برای پیام بقیه نام رو نشون بده */ }
-        .msg-text { font-size: 15px; line-height: 1.4; word-wrap: break-word; }
+        .sender-name { font-size: 13px; font-weight: 600; color: var(--accent-color); margin-bottom: 4px; display: none; }
+        .other .sender-name { display: block; }
+        .msg-text { font-size: 15px; line-height: 1.4; word-wrap: break-word; white-space: pre-wrap; }
 
-        /* فوتر و باکس اینپوت فیکس */
+        /* فوتر فیکس */
         footer {
-            position: fixed; bottom: 10px; left: 10px; right: 10px;
+            position: fixed; bottom: 15px; left: 10px; right: 10px;
             display: flex; align-items: flex-end; gap: 10px; z-index: 100;
         }
-        .input-wrapper {
-            flex: 1; border-radius: 24px; padding: 10px 15px;
-            display: flex; align-items: center; min-height: 50px;
-        }
+        .input-wrapper { flex: 1; border-radius: 24px; padding: 10px 15px; display: flex; align-items: center; min-height: 50px; }
         #msg-input {
             width: 100%; background: transparent; border: none; outline: none;
-            color: var(--text-main); font-size: 16px; max-height: 100px;
-            resize: none; overflow-y: auto; font-family: inherit;
+            color: var(--text-main); font-size: 16px; max-height: 120px;
+            resize: none; overflow-y: auto; font-family: inherit; line-height: 20px;
         }
         #msg-input::placeholder { color: var(--text-muted); }
-        
         .send-btn {
             width: 50px; height: 50px; border-radius: 50%; background: var(--accent-color);
             border: none; color: #fff; display: flex; justify-content: center; align-items: center;
             cursor: pointer; flex-shrink: 0; box-shadow: var(--neon-glow);
-            transition: transform 0.2s, background 0.3s;
         }
-        .send-btn:active { transform: scale(0.9); }
         .send-btn svg { width: 24px; height: 24px; fill: currentColor; margin-right: 4px; }
     </style>
 </head>
 <body>
 
-    <!-- صفحه ورود (لاگین) کپی تلگرام -->
     <div id="login-screen">
         <div class="login-box">
             <div class="login-logo">
@@ -204,12 +196,9 @@
         </div>
     </div>
 
-    <!-- محیط اصلی چت -->
     <div id="chat-screen">
-        <!-- هدر -->
         <header class="glass">
             <div class="header-left">
-                <!-- آیکون پروفایل گروه -->
                 <img src="f.png" alt="Group" class="group-avatar" onerror="this.src='data:image/svg+xml;charset=UTF-8,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22%3E%3Crect width=%22100%22 height=%22100%22 fill=%22%233390ec%22/%3E%3Ctext x=%2250%22 y=%2255%22 font-size=%2240%22 fill=%22white%22 text-anchor=%22middle%22 dominant-baseline=%22middle%22 font-family=%22Arial%22%3EEG%3C/text%3E%3C/svg%3E'">
                 <div class="group-info">
                     <h1>English gap</h1>
@@ -219,23 +208,19 @@
             <button class="theme-btn" onclick="toggleTheme()" id="theme-icon">🌙</button>
         </header>
 
-        <!-- محل نمایش پیام‌ها -->
         <div id="messages-container"></div>
 
-        <!-- فوتر و اینپوت فیکس -->
         <footer>
             <div class="input-wrapper glass">
                 <textarea id="msg-input" rows="1" placeholder="Message" oninput="autoResize(this)" onkeypress="handleKeyPress(event)"></textarea>
             </div>
             <button class="send-btn" onclick="sendMessage()">
-                <!-- آیکون موشک ارسال تلگرام -->
                 <svg viewBox="0 0 24 24"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
             </button>
         </footer>
     </div>
 
     <script>
-        // ================= تنظیمات اتصال به سوپابیس =================
         const SUPABASE_URL = "https://nyacmumgxdocsvgkribt.supabase.co/rest/v1/messages";
         const SUPABASE_KEY = "sb_publishable_KkurUdEDr8cU0F219jCRcg_A6QFWCWw";
         
@@ -243,7 +228,6 @@
         let lastMessageCount = 0;
         let fetchInterval;
 
-        // ================= مدیریت تم (لایت/دارک) =================
         function initTheme() {
             const savedTheme = localStorage.getItem('tg_theme') || 'light';
             document.body.setAttribute('data-theme', savedTheme);
@@ -262,7 +246,6 @@
             document.getElementById('theme-icon').innerText = theme === 'dark' ? '☀️' : '🌙';
         }
 
-        // ================= مدیریت لاگین =================
         function checkLogin() {
             const savedUser = localStorage.getItem('tg_username');
             if (savedUser) {
@@ -282,25 +265,19 @@
             }
         }
 
-        function handleLoginPress(e) {
-            if (e.key === 'Enter') login();
-        }
+        function handleLoginPress(e) { if (e.key === 'Enter') login(); }
 
         function showChat() {
             document.getElementById('login-screen').style.display = 'none';
             document.getElementById('chat-screen').style.display = 'flex';
-            fetchMessages(); // دریافت بلافاصله
-            fetchInterval = setInterval(fetchMessages, 1500); // حلقه While تو (هر 1.5 ثانیه)
+            fetchMessages();
+            fetchInterval = setInterval(fetchMessages, 1500); 
         }
 
-        // ================= دریافت پیام‌ها (ریسیو) =================
         function fetchMessages() {
             fetch(`${SUPABASE_URL}?select=*&order=created_at.asc`, {
                 method: "GET",
-                headers: {
-                    "apikey": SUPABASE_KEY,
-                    "Authorization": `Bearer ${SUPABASE_KEY}`
-                }
+                headers: { "apikey": SUPABASE_KEY, "Authorization": `Bearer ${SUPABASE_KEY}` }
             })
             .then(res => res.json())
             .then(data => {
@@ -319,7 +296,6 @@
             
             messages.forEach(msg => {
                 const isSelf = msg.sender === currentUser;
-                
                 const rowDiv = document.createElement('div');
                 rowDiv.className = `msg-row ${isSelf ? 'self' : 'other'}`;
                 
@@ -333,19 +309,21 @@
             });
         }
 
+        // بهبود تابع اسکرول با تاخیر کوچک برای رندر کامل DOM
         function scrollToBottom() {
             const container = document.getElementById('messages-container');
-            container.scrollTop = container.scrollHeight;
+            setTimeout(() => {
+                container.scrollTop = container.scrollHeight;
+            }, 50);
         }
 
-        // ================= ارسال پیام (سند) =================
         function sendMessage() {
             const inputEl = document.getElementById('msg-input');
             const text = inputEl.value.trim();
             if (!text) return;
 
             inputEl.value = '';
-            autoResize(inputEl); // برگردوندن سایز اینپوت به حالت اول
+            autoResize(inputEl);
 
             fetch(SUPABASE_URL, {
                 method: "POST",
@@ -357,41 +335,28 @@
                 },
                 body: JSON.stringify({ sender: currentUser, text: text })
             })
-            .then(res => {
-                if(res.ok) fetchMessages();
-            })
+            .then(res => { if(res.ok) fetchMessages(); })
             .catch(err => console.error("Error Sending:", err));
         }
 
         function handleKeyPress(e) {
-            // با زدن اینتر پیام بره (مگر اینکه شیفت+اینتر زده بشه برای خط جدید)
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
                 sendMessage();
             }
         }
 
-        // ================= توابع کمکی =================
-        // تغییر سایز خودکار باکس پیام (مثل تلگرام)
         function autoResize(textarea) {
             textarea.style.height = 'auto';
-            textarea.style.height = (textarea.scrollHeight < 100 ? textarea.scrollHeight : 100) + 'px';
+            textarea.style.height = (textarea.scrollHeight < 120 ? textarea.scrollHeight : 120) + 'px';
         }
 
-        // جلوگیری از کدهای مخرب HTML در متن پیام
         function escapeHTML(str) {
-            return str.replace(/[&<>'"]/g, 
-                tag => ({
-                    '&': '&amp;',
-                    '<': '&lt;',
-                    '>': '&gt;',
-                    "'": '&#39;',
-                    '"': '&quot;'
-                }[tag] || tag)
-            );
+            return str.replace(/[&<>'"]/g, tag => ({
+                '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;'
+            }[tag] || tag));
         }
 
-        // راه‌اندازی در شروع
         initTheme();
         checkLogin();
     </script>
